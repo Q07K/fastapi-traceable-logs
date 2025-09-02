@@ -5,13 +5,13 @@ from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.core.logging import get_logger
-from app.core.logging_formatter import set_request_id
+from app.core.request_id import set_request_id
 
 # 'app.middleware' 네임스페이스로 로거 가져오기
 logger = get_logger(name="app.middleware")
 
 
-class LoggingMiddleware(BaseHTTPMiddleware):
+class MiddlewareLogger(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         # 요청 ID 생성
         request_id = str(uuid.uuid4().hex)
@@ -33,7 +33,6 @@ class LoggingMiddleware(BaseHTTPMiddleware):
                 " | "
                 f"User-Agent: {user_agent}"
             ),
-            extra={"request_id": request_id},
         )
 
         # 요청 처리
@@ -47,9 +46,6 @@ class LoggingMiddleware(BaseHTTPMiddleware):
                 " | "
                 f"Process Time: {process_time:.4f}s"
             ),
-            extra={
-                "request_id": request_id,
-            },
         )
 
         return response
