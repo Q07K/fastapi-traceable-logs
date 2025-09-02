@@ -3,9 +3,19 @@ from datetime import datetime
 from logging.handlers import TimedRotatingFileHandler
 from pathlib import Path
 
-from app.core.logging_formatter import CustomFormatter
+from app.core.request_id import get_request_id
 
 logging.basicConfig(level=logging.INFO)
+
+
+class CustomFormatter(logging.Formatter):
+    """Request ID를 자동으로 포함하는 커스텀 포매터"""
+
+    def format(self, record) -> str:
+        # 현재 컨텍스트에서 request ID 가져오기
+        request_id = get_request_id()
+        record.request_id = request_id
+        return super().format(record)
 
 
 FORMAT = CustomFormatter(

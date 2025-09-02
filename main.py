@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.logging import setup_logging
-from app.middleware.logging import LoggingMiddleware
+from app.middleware.logger import MiddlewareLogger
 from app.routers import test
 
 
@@ -37,7 +37,7 @@ app.add_middleware(
 )
 
 # 로깅 미들웨어 추가
-app.add_middleware(middleware_class=LoggingMiddleware)
+app.add_middleware(middleware_class=MiddlewareLogger)
 
 # API 라우터 포함
 app.include_router(test.router)
